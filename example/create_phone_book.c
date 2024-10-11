@@ -27,7 +27,7 @@ typedef struct phone_t {
 //设置节点项属性值
 static void set_phone_item(phone *phone_item)
 {
-    phone_item->id = 0;
+    phone_item->id = 10;
     snprintf(phone_item->name, NAME_STR_LEN, "%s", "Anker");
     snprintf(phone_item->tel, TEL_STR_LEN, "%s", "123456789");
     snprintf(phone_item->address, ADDR_STR_LEN, "%s", "Shenzhen");
@@ -44,12 +44,12 @@ static xmlNodePtr create_phone_node(const phone *phone_item)
         return NULL;
     }
     //设置xml属性
-    snprintf(id, ID_STR_LEN, "%s", phone_item->id);
-    xmlNewProp(phone_node, BAD_CAT"id",  (xmlChar*)id);
+    snprintf(id, ID_STR_LEN, "%d", phone_item->id);
+    xmlNewProp(phone_node, BAD_CAST"id",  (xmlChar*)id);
     
-    xmlNewChild(phone_node, BAD_CAT"name",  (xmlChar*)phone_item->name);
-    xmlNewChild(phone_node, BAD_CAT"tel",  (xmlChar*)phone_item->tel);
-    xmlNewChild(phone_node, BAD_CAT"address",  (xmlChar*)phone_item->address);
+    xmlNewChild(phone_node, NULL, BAD_CAST"name",  (xmlChar*)phone_item->name);
+    xmlNewChild(phone_node, NULL, BAD_CAST"tel",  (xmlChar*)phone_item->tel);
+    xmlNewChild(phone_node, NULL, BAD_CAST"address",  (xmlChar*)phone_item->address);
     
     return phone_node;
 }
@@ -84,7 +84,7 @@ static int create_phone_books(const char *phone_book_file)
     xmlNodePtr root_node = NULL;
     
     //创建xml文件
-    doc = xmlNewDoc(BAS_CAST"1.0");
+    doc = xmlNewDoc(BAD_CAST"1.0");
     if (doc == NULL) {
         fprintf(stderr, "Failed to create the xml file.");
         return -1;
@@ -94,7 +94,7 @@ static int create_phone_books(const char *phone_book_file)
     root_node = xmlNewNode(NULL, BAD_CAST"phone_books");
     if (root_node == NULL) {
         fprintf(stderr, "Failed to create the root node.");
-        xmlFree(doc)
+        xmlFree(doc);
         return -1;
     }
     
@@ -153,7 +153,7 @@ static int add_phone_node(const char *phone_book_file)
 int main(int argc, char *argv[])
 {
     int ret;
-    char *phone_book_file = PHONE_BOOK_FILE;
+    char *phone_book_file;
     if (argc = 2) {
         phone_book_file = argv[1];
     }
@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
         ret = add_phone_node(phone_book_file);
     } else {
         //文件不存在则创建文件再添加节点
-        ret = create_phone_books(phone_book_file);
+        ret = create_phone_books(PHONE_BOOK_FILE);
     }
     
     if (ret != 0) {
