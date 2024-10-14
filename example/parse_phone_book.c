@@ -7,9 +7,9 @@
 #include <libxml/tree.h>
 #include <libxml/xmlmemory.h>
 
-static int parse_phone(xmlDocPtr doc，xmlNodePtr cur)
+static int parse_phone(xmlDocPtr doc, xmlNodePtr cur)
 {
-    xmlChar key;
+    xmlChar *key;
     
     cur = cur->xmlChildrenNode;
     while (cur != NULL) {
@@ -58,7 +58,7 @@ static int parse_phone_book(const char *file_name)
     }
     
     //处理根结点
-    if ((xmlStrcmp(cur->name, (const xmlChar *)"phone_book"))) {
+    if ((xmlStrcmp(cur->name, (const xmlChar *)"phone_books"))) {
         fprintf(stderr, "The root is not phone_book\n");
         return -1;
     }
@@ -89,9 +89,9 @@ int main(int argc,char *argv[])
     }
     
     if (parse_phone_book(xml_file) != 0) {
-        fprintf(stderr, "Filded to parse xml.\n")
+        fprintf(stderr, "Filded to parse xml.\n");
         return -1;
     }
     
-    return;
+    return 0;
 }
